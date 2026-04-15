@@ -7,6 +7,13 @@ import os
 import sys
 from pathlib import Path
 
+# Load .env file if present (optional dependency)
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass  # python-dotenv not installed, rely on environment variables directly
+
 from multicoder.config import load_config, get_provider_config, get_fallback_chain, ConfigError
 from multicoder.providers.cli_provider import CLIProvider
 from multicoder.providers.api_provider import APIProvider
