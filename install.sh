@@ -71,6 +71,15 @@ done
 
 success "Library files installed"
 
+# ── 3b. Install global config ─────────────────
+if [ ! -f "$HOME/.multicoder.json" ]; then
+    info "Installing global config to ~/.multicoder.json..."
+    cp "$INSTALL_DIR/.multicoder.json" "$HOME/.multicoder.json"
+    success "Global config installed at ~/.multicoder.json"
+else
+    warn "~/.multicoder.json already exists — skipping (not overwritten)"
+fi
+
 # ── 4. Create multicoder command ──────────────
 info "Creating multicoder command..."
 mkdir -p "$BIN_DIR"
@@ -116,12 +125,16 @@ success "Multicoder installed!"
 echo ""
 echo "  Next steps:"
 echo ""
-echo "  1. In your project, create .multicoder.json:"
-echo "     cp $INSTALL_DIR/.multicoder.json ./.multicoder.json"
+echo "  1. Edit your global config (used by all projects):"
+echo "     nano ~/.multicoder.json"
 echo ""
-echo "  2. Set your API keys:"
+echo "  2. Set your API keys in your project (or globally):"
 echo "     cp $INSTALL_DIR/.env.example ./.env"
 echo "     # Edit .env and fill in MINIMAX_API_KEY, DASHSCOPE_API_KEY"
+echo ""
+echo "  Optional: override config per-project:"
+echo "     cp ~/.multicoder.json ./.multicoder.json"
+echo "     # Edit ./.multicoder.json — takes priority over global"
 echo ""
 echo "  3. In Claude Code, use:"
 echo "     /multicoder \"build a login page with JWT auth\""
