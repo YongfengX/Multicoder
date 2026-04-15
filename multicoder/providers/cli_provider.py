@@ -8,6 +8,10 @@ class CLIProvider(BaseProvider):
         self.command = command
         self.timeout = timeout
 
+    @property
+    def model_info(self) -> str:
+        return self.command
+
     def run(self, task_file: str, output_file: str) -> None:
         task_content = Path(task_file).read_text()
 

@@ -70,6 +70,11 @@ def cmd_exec(args, config):
     task_path = str(session.session_dir / args.task_file)
     output_path = str(session.session_dir / args.output)
 
+    chain_display = ", ".join(
+        f"{name} ({p.model_info})" for name, p in providers
+    )
+    print(f"[{args.task_type}] Provider chain: {chain_display}")
+
     try:
         used = run_with_fallback(
             providers=providers,
@@ -77,6 +82,7 @@ def cmd_exec(args, config):
             output_file=output_path,
             max_retries=3
         )
+        used_model = next((p.model_info for name, p in providers if name == used), used)
         if used != chain_names[0]:
             session.log_fallback(
                 task_id=session.state.get("current_task_id", 0),
@@ -84,7 +90,7 @@ def cmd_exec(args, config):
                 used=used,
                 reason="primary_failed"
             )
-        print(f"OK: completed with provider '{used}'. Output: {args.output}")
+        print(f"OK: completed with provider '{used}' (model: {used_model}). Output: {args.output}")
     except ProviderError as e:
         session.write_artifact(args.output, f"# Error\n\n{str(e)}")
         session.update(status="error")

@@ -15,6 +15,10 @@ class APIProvider(BaseProvider):
         self.api_key = api_key
         self.timeout = timeout
 
+    @property
+    def model_info(self) -> str:
+        return self.model
+
     def run(self, task_file: str, output_file: str) -> None:
         task_content = Path(task_file).read_text()
 

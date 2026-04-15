@@ -9,6 +9,11 @@ class ProviderError(Exception):
 
 
 class BaseProvider(ABC):
+    @property
+    def model_info(self) -> str:
+        """Human-readable model identifier for display purposes."""
+        return self.__class__.__name__
+
     @abstractmethod
     def run(self, task_file: str, output_file: str) -> None:
         """Read instructions from task_file, execute, write result to output_file.
